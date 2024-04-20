@@ -125,7 +125,7 @@ def camPreview(previewName, camID):
                 #predicted_class_name = CLASSES_LIST[predicted_label]
 
             if predicted_class_name == "Violence":
-                cv2.putText(frame, predicted_class_name + ": " + str(round(predicted_labels_probabilities[1], 2)), (5, 100), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 12)
+                cv2.putText(frame, predicted_class_name, (5, 100), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 12)
             else:
                 cv2.putText(frame, predicted_class_name, (5, 100), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 255, 0), 10)
 
