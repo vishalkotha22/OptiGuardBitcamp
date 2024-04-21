@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GeoSpatial Crime Mapping - DMV Metro</title>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script>
+        // Create a map instance centered on the DMV metro area
+        var map = L.map('map').setView([38.9072, -77.0369], 13);
+
+        // Add a tile layer using OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+        }).addTo(map);
+
+        // Aggressor and victim marker icons
+        var aggressorIcon = L.icon({
+            iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+        });
+
+        var victimIcon = L.icon({
+            iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+        });
+
+        // Aggressor and victim paths
+        var path = [
+            [38.9072, -77.0369], // Starting point
+            [38.9073, -77.0370],
+            [38.9074, -77.0371],
+            [38.9075, -77.0372],
+            [38.9076, -77.0373],
+            [38.9077, -77.0374],
+            [38.9078, -77.0375],
+            [38.9079, -77.0376],
+            [38.9080, -77.0377],
+            [38.9081, -77.0378]
+        ];
+
+        // Add aggressor and victim markers to the map
+        var aggressorMarker = L.marker(path[0], { icon: aggressorIcon }).addTo(map);
+        var victimMarker = L.marker(path[0], { icon: victimIcon }).addTo(map);
+
+        // Animate the markers along the path
+        var currentIndex = 0;
+        var animationSpeed = 1000; // Adjust the speed of animation (in milliseconds)
+        var interpolationSteps = 50; // Number of interpolation steps between path points
+        var separationDistance = 0.00002; // Distance markers move away from each other per step
+
+        function animateMarkers() {
+            if (currentIndex >= path.length - 1) {
+                currentIndex = 0;
+            } else {
+                currentIndex++;
+            }
+
+            var start = path[currentIndex - 1] || path[0];
+            var end = path[currentIndex];
+
+            var deltaLat = (end[0] - start[0]) / interpolationSteps;
+            var deltaLng = (end[1] - start[1]) / interpolationSteps;
+
+            var interpolationStep = 0;
+
+            function interpolatePositions() {
+                var aggressorLat = start[0] + interpolationStep * deltaLat;
+                var aggressorLng = start[1] + interpolationStep * deltaLng;
+                var victimLat = aggressorLat - interpolationStep * separationDistance;
+                var victimLng = aggressorLng - interpolationStep * separationDistance;
+
+                aggressorMarker.setLatLng([aggressorLat, aggressorLng]);
+                victimMarker.setLatLng([victimLat, victimLng]);
+
+                interpolationStep++;
+
+                if (interpolationStep <= interpolationSteps) {
+                    setTimeout(interpolatePositions, animationSpeed);
+                } else {
+                    setTimeout(animateMarkers, animationSpeed);
+                }
+            }
+
+            interpolatePositions();
+        }
+
+        animateMarkers();
+    </script>
+</body>
+</html>
