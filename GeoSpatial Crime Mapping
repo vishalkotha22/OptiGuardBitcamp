@@ -3,6 +3,7 @@
 <head>
     <title>GeoSpatial Crime Mapping - DMV Metro</title>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    // The stylesheet
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         #map {
@@ -18,7 +19,7 @@
         // Create a map instance centered on the DMV metro area
         var map = L.map('map').setView([38.9072, -77.0369], 13);
 
-        // Add a tile layer using OpenStreetMap
+        // Add a tile layer using OpenStreetMap. This is the first tile layer make sure to add more after. 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
             maxZoom: 18,
